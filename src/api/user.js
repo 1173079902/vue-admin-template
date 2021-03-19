@@ -1,7 +1,7 @@
-// import request from '@/utils/request'
+import request from '@/utils/request'
 
 export function login(data) {
-  return Request({
+  return request({
     url: '/sys/login',
     method: 'post',
     data
