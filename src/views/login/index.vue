@@ -14,9 +14,9 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          v-model="loginForm.mobile"
+          placeholder="mobile"
+          name="mobile"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -55,33 +55,35 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validMobile } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
+    // 自定义校验函数
+    const validateMobile = function(rule, value, callback) {
+      // 校验value
+      // if (validMobile(value)) {
+      //   // 如果通过 直接执行callback
+      //   callback()
+      // } else {
+      //   callback(new Error('手机号格式不正确'))
+      // }
+      validMobile(value) ? callback() : callback(new Error('手机号格式不正确'))
     }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
+
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        mobile: '13800000002',
+        password: '123456'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        mobile: [{ required: true, trigger: 'blur', message: '手机号不能为空' }, {
+          validator: validateMobile, trigger: 'blur'
+        }],
+        password: [{ required: true, trigger: 'blur', message: '密码不能为空' }, {
+          min: 6, max: 16, message: '密码的长度在6-16位之间 ', trigger: 'blur'
+        }]
       },
       loading: false,
       passwordType: 'password',
