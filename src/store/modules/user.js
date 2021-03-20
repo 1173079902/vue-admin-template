@@ -26,7 +26,7 @@ const mutations = {
     state.userInfo = { ...userInfo } // 用 浅拷贝的方式去赋值对象 因为这样数据更新之后，才会触发组件的更新
   },
   // 删除用户信息
-  reomveUserInfo(state) {
+  removeUserInfo(state) {
     state.userInfo = {}
   }
 }
@@ -47,6 +47,12 @@ const actions = {
     const baseInfo = await getUserDetailById(result.userId)
     context.commit('setUserInfo', { ...result, ...baseInfo })
     return result
+  },
+  logout(context) {
+    // 删除token
+    context.commit('removeToken') // 不仅仅删除了vuex中的 还删除了缓存中的
+    // 删除用户资料
+    context.commit('removeUserInfo') // 删除用户信息
   }
 }
 export default {
