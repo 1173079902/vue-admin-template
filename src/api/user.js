@@ -15,3 +15,14 @@ export function getInfo(token) {
 export function logout() {
 
 }
+
+/**
+ *  获取用户的基本资料
+ *
+ * **/
+export function getUserInfo() {
+  return request({
+    url: '/sys/profile',
+    method: 'post'
+  })
+}
