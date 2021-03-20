@@ -1,5 +1,5 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login, getUserInfo } from '@/api/user'
+import { login, getUserInfo, getUserDetailById } from '@/api/user'
 
 // 状态
 // 初始化的时候从缓存中读取状态 并赋值到初始化的状态上
@@ -44,7 +44,9 @@ const actions = {
   },
   async getUserInfo(context) {
     const result = await getUserInfo()
-    context.commit('setUserInfo', result)
+    const baseInfo = await getUserDetailById(result.userId)
+    context.commit('setUserInfo', { ...result, ...baseInfo })
+    return result
   }
 }
 export default {
