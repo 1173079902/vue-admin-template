@@ -21,6 +21,7 @@
 <script>
 import TreeTools from '@/views/departments/components/tree-tools'
 import { getDepartments } from '@/api/departments'
+import { tranListToTreeData } from '@/utils/index'
 export default {
   components: {
     TreeTools
@@ -49,7 +50,7 @@ export default {
     async getDepartments() {
       const result = await getDepartments()
       this.company = { name: result.companyName, manager: '负责人' }
-      this.departs = result.depts
+      this.departs = tranListToTreeData(result.depts, '')
       console.log(result)
     }
   }
