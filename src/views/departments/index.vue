@@ -51,7 +51,6 @@ export default {
       const result = await getDepartments()
       this.company = { name: result.companyName, manager: '负责人' }
       this.departs = tranListToTreeData(result.depts, '')
-      console.log(result)
     }
   }
 }
