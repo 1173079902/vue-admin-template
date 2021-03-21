@@ -20,13 +20,14 @@
 
 <script>
 import TreeTools from '@/views/departments/components/tree-tools'
+import { getDepartments } from '@/api/departments'
 export default {
   components: {
     TreeTools
   },
   data() {
     return {
-      company: { name: '江苏传智播客教育科技股份有限公司', manager: '负责人' },
+      company: {},
       departs: [
         {
           name: '总裁办',
@@ -39,6 +40,17 @@ export default {
       defaultProps: {
         label: 'name' // 表示 从这个属性显示内容
       }
+    }
+  },
+  created() {
+    this.getDepartments()
+  },
+  methods: {
+    async getDepartments() {
+      const result = await getDepartments()
+      this.company = { name: result.companyName, manager: '负责人' }
+      this.departs = result.depts
+      console.log(result)
     }
   }
 }
