@@ -15,10 +15,13 @@
             slot-scope="{ data }"
             :tree-node="data"
             @delDepts="getDepartments"
+            @addDepts="addDepts"
           />
         </el-tree>
       </el-card>
     </div>
+    <!-- 放置新增弹层组件  -->
+    <add-dept :show-dialog="showDialog" />
   </div>
 </template>
 
@@ -26,13 +29,15 @@
 import TreeTools from '@/views/departments/components/tree-tools'
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils/index'
+import AddDept from './components/add-dept' // 引入新增部门组件
 export default {
   components: {
-    TreeTools
+    TreeTools,
+    AddDept
   },
   data() {
     return {
-      company: {},
+      company: { name: '', manager: '' },
       departs: [
         {
           name: '总裁办',
@@ -44,7 +49,9 @@ export default {
       ],
       defaultProps: {
         label: 'name' // 表示 从这个属性显示内容
-      }
+      },
+      showDialog: false, // 显示窗体
+      node: null
     }
   },
   created() {
@@ -55,6 +62,10 @@ export default {
       const result = await getDepartments()
       this.company = { name: result.companyName, manager: '负责人' }
       this.departs = tranListToTreeData(result.depts, '')
+    },
+    addDepts(node) {
+      this.showDialog = true
+      this.node = node
     }
   }
 }
