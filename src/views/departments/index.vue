@@ -23,7 +23,7 @@
     <!-- 放置新增弹层组件  -->
     <add-dept
       :tree-node="node"
-      :show-dialog="showDialog"
+      :show-dialog.sync="showDialog"
       @addDepts="getDepartments"
     />
   </div>
