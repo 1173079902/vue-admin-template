@@ -88,9 +88,19 @@ export default {
       const { depts } = await getDepartments()
       // depts是所有的部门数据
       // 如何去找技术部所有的子节点
-      const isRepeat = depts
-        .filter(item => item.pid === this.treeNode.id)
-        .some(item => item.name === value)
+      let isRepeat = false
+      if (this.treeNode.id) {
+        isRepeat = depts
+          .filter(
+            item =>
+              item.id !== this.formData.id && item.pid === this.treeNode.pid
+          )
+          .some(item => item.name === value)
+      } else {
+        isRepeat = depts
+          .filter(item => item.pid === this.treeNode.id)
+          .some(item => item.name === value)
+      }
       isRepeat
         ? callback(new Error(`同级部门下已经有${value}的部门了`))
         : callback()
@@ -99,7 +109,12 @@ export default {
     const checkCodeRepeat = async(rule, value, callback) => {
       // 先要获取最新的组织架构数据
       const { depts } = await getDepartments()
-      const isRepeat = depts.some(item => item.code === value && value) // 这里加一个 value不为空 因为我们的部门有可能没有code
+      let isRepeat = false
+      if (this.formData.id) {
+        isRepeat = depts.some(item => item.id !== this.formData.id && item.code === value && value)
+      } else {
+        isRepeat = depts.some(item => item.code === value && value) // 这里加一个 value不为空 因为我们的部门有可能没有code
+      }
       isRepeat
         ? callback(new Error(`组织架构中已经有部门使用${value}编码`))
         : callback()
