@@ -1,6 +1,6 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog title="新增部门" :visible="showDialog">
+  <el-dialog title="新增部门" :visible="showDialog" @close="btnCancel">
     <!-- 匿名插槽放置表单 -->
     <el-form
       ref="deptForm"
@@ -55,7 +55,7 @@
     <!-- 具名插槽 -->
     <el-row slot="footer" type="flex" justify="center">
       <el-col :span="6">
-        <el-button size="small">取消</el-button>
+        <el-button size="small" @close="btnCancel">取消</el-button>
         <el-button type="primary" size="small" @click="btnOk">确定</el-button>
       </el-col>
     </el-row>
@@ -163,6 +163,10 @@ export default {
         this.$emit('addDepts')
         this.$emit('update:showDialog', false)
       })
+    },
+    btnCancel() {
+      this.$refs.deptForm.resetFields() // 重置校验字段
+      this.$emit('update:showDialog', false) // 关闭
     }
   }
 }
