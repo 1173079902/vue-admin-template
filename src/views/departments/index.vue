@@ -16,6 +16,7 @@
             :tree-node="data"
             @delDepts="getDepartments"
             @addDepts="addDepts"
+            @editDepts="editDepts"
           />
         </el-tree>
       </el-card>
@@ -62,6 +63,12 @@ export default {
     addDepts(node) {
       this.showDialog = true
       this.node = node
+    },
+    // 编辑部门节点
+    editDepts(node) {
+      // 首先打开弹层
+      this.showDialog = true
+      this.node = node // 赋值操作的节点
     }
   }
 }
