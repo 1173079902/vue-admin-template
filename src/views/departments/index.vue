@@ -21,7 +21,11 @@
       </el-card>
     </div>
     <!-- 放置新增弹层组件  -->
-    <add-dept :tree-node="node" :show-dialog="showDialog" />
+    <add-dept
+      :tree-node="node"
+      :show-dialog="showDialog"
+      @addDepts="getDepartments"
+    />
   </div>
 </template>
 
