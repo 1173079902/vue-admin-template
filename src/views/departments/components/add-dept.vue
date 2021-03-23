@@ -62,7 +62,7 @@
   </el-dialog>
 </template>
 <script>
-import { getDepartments, addDepartments } from '@/api/departments'
+import { getDepartments, addDepartments, getDepartDetail } from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   props: {
@@ -167,6 +167,9 @@ export default {
     btnCancel() {
       this.$refs.deptForm.resetFields() // 重置校验字段
       this.$emit('update:showDialog', false) // 关闭
+    },
+    async getDepartDetail(id) {
+      this.formData = await getDepartDetail(id)
     }
   }
 }

@@ -23,6 +23,7 @@
     </div>
     <!-- 放置新增弹层组件  -->
     <add-dept
+      ref="addDept"
       :tree-node="node"
       :show-dialog.sync="showDialog"
       @addDepts="getDepartments"
@@ -69,6 +70,7 @@ export default {
       // 首先打开弹层
       this.showDialog = true
       this.node = node // 赋值操作的节点
+      this.$refs.addDept.getDepartDetail(node.id)
     }
   }
 }
