@@ -25,7 +25,16 @@
           style="width:80%"
           value=""
           placeholder="请选择"
-        />
+          @focus="getEmployeeSimple"
+        >
+          <!-- 需要循环生成选项   这里做一下简单的处理 显示的是用户名 存的也是用户名-->
+          <el-option
+            v-for="item in peoples"
+            :key="item.id"
+            :label="item.username"
+            :value="item.username"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="部门介绍" prop="introduce">
         <el-input
@@ -49,6 +58,7 @@
 </template>
 <script>
 import { getDepartments } from '@/api/departments'
+import { getEmployeeSimple } from '@/api/employees'
 export default {
   props: {
     showDialog: {
@@ -132,7 +142,13 @@ export default {
             message: '部门介绍要求1-50个字符'
           }
         ]
-      }
+      },
+      peoples: []
+    }
+  },
+  methods: {
+    async getEmployeeSimple() {
+      this.peoples = await getEmployeeSimple()
     }
   }
 }
