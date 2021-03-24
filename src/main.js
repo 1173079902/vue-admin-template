@@ -15,13 +15,16 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as directives from '@/directives'
-
+import * as filters from '@/filters'
 import Component from '@/components'
 
 Vue.use(Component) // 注册自己的插件
 
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
+})
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]) // 注册过滤器
 })
 /**
  * If you don't want to use mock-server
