@@ -7,7 +7,7 @@
           <el-tab-pane label="角色管理">
             <!-- 新增角色按钮 -->
             <el-row style="height:60px">
-              <el-button icon="el-icon-plus" size="small" type="primary">新增角色</el-button>
+              <el-button icon="el-icon-plus" size="small" type="primary" @click="showDialog = true">新增角色</el-button>
             </el-row>
             <!-- 表格 -->
             <el-table border="" :data="list">
@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { getRoleList, getCompanyInfo, deleteRole, getRoleDetail, updateRole } from '@/api/setting'
+import { getRoleList, getCompanyInfo, deleteRole, getRoleDetail, updateRole, addRole } from '@/api/setting'
 import { mapGetters } from 'vuex'
 export default {
   data() {
@@ -174,16 +174,20 @@ export default {
     },
     async editRole(id) {
       this.roleForm = await getRoleDetail(id)
-      this.showDialog = true
+      this.showDialog = true // 为了不出现闪烁的问题 先获取数据 再弹出层
     },
     async btnOK() {
       try {
         await this.$refs.roleForm.validate()
+        // 只有校验通过的情况下 才会执行await的下方内容
+        // roleForm这个对象有id就是编辑 没有id就是新增
         if (this.roleForm.id) {
           await updateRole(this.roleForm)
         } else {
           // 新增业务
+          await addRole(this.roleForm)
         }
+        // 重新拉取数据
         this.getRoleList()
         this.$message.success('操作成功')
         this.showDialog = false
@@ -191,7 +195,14 @@ export default {
         console.log(error)
       }
     },
-    btnCancel() {}
+    btnCancel() {
+      this.formData = {
+        name: '',
+        description: ''
+      }
+      this.$refs.roleForm.resetFields()
+      this.showDialog = false
+    }
   }
 }
 </script>
