@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { getRoleList, getCompanyInfo, deleteRole, getRoleDetail } from '@/api/setting'
+import { getRoleList, getCompanyInfo, deleteRole, getRoleDetail, updateRole } from '@/api/setting'
 import { mapGetters } from 'vuex'
 export default {
   data() {
@@ -176,8 +176,22 @@ export default {
       this.roleForm = await getRoleDetail(id)
       this.showDialog = true
     },
-    btnCancel() {},
-    btnOK() {}
+    async btnOK() {
+      try {
+        await this.$refs.roleForm.validate()
+        if (this.roleForm.id) {
+          await updateRole(this.roleForm)
+        } else {
+          // 新增业务
+        }
+        this.getRoleList()
+        this.$message.success('操作成功')
+        this.showDialog = false
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    btnCancel() {}
   }
 }
 </script>
