@@ -190,7 +190,7 @@ export default {
         // 重新拉取数据
         this.getRoleList()
         this.$message.success('操作成功')
-        this.showDialog = false
+        this.showDialog = false // 关闭弹层 => 触发el-dialog的事件dlose事件
       } catch (error) {
         console.log(error)
       }
@@ -200,6 +200,7 @@ export default {
         name: '',
         description: ''
       }
+      // 移除效验
       this.$refs.roleForm.resetFields()
       this.showDialog = false
     }
