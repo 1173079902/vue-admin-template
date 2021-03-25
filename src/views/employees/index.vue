@@ -6,7 +6,7 @@
         <template slot="after">
           <el-button size="small" type="warning">导入</el-button>
           <el-button size="small" type="danger">导出</el-button>
-          <el-button size="small" type="primary">新增员工</el-button>
+          <el-button size="small" type="primary" @click="showDialog = true">新增员工</el-button>
         </template>
       </page-tools>
       <!-- 放置表格和分页 -->
@@ -49,13 +49,19 @@
         </el-row>
       </el-card>
     </div>
+    <!-- 放置新增组件 -->
+    <add-employee :show-dialog="showDialog" />
   </div>
 </template>
 
 <script>
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
+import AddEmployee from './components/add-employee'
 export default {
+  components: {
+    AddEmployee
+  },
   data() {
     return {
       loading: false,
@@ -64,7 +70,8 @@ export default {
         page: 1,
         size: 10,
         total: 0
-      }
+      },
+      showDialog: false
     }
   },
   created() {

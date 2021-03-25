@@ -12,7 +12,7 @@
         <el-date-picker style="width:50%" placeholder="请选择入职时间" />
       </el-form-item>
       <el-form-item label="聘用形式">
-        <el-select style="width:50%" placeholder="请选择" />
+        <el-select v-model="value" style="width:50%" placeholder="请选择" />
       </el-form-item>
       <el-form-item label="工号">
         <el-input style="width:50%" placeholder="请输入工号" />
@@ -38,10 +38,18 @@
 
 <script>
 export default {
-
+  props: {
+    showDialog: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      value: ''
+    }
+  }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
