@@ -18,7 +18,16 @@
         <el-input v-model="formData.workNumber" style="width:50%" placeholder="请输入工号" />
       </el-form-item>
       <el-form-item label="部门" prop="departmentName">
-        <el-input v-model="formData.departmentName" style="width:50%" placeholder="请选择部门" />
+        <el-input v-model="formData.departmentName" style="width:50%" placeholder="请选择部门" @focus="getDepartments" />
+        <!-- 放置一个tree组件 -->
+        <el-tree
+          v-if="showTree"
+          v-loading="loading"
+          :data="treeData"
+          default-expand-all=""
+          :props="{ label: 'name' }"
+          @node-click="selectNode"
+        />
       </el-form-item>
       <el-form-item label="转正时间" prop="correctionTime">
         <el-date-picker v-model="formData.correctionTime" style="width:50%" placeholder="请选择日期" />
@@ -38,6 +47,8 @@
 
 <script>
 import EmployeeEnum from '@/api/constant/employees'
+import { getDepartments } from '@/api/departments'
+import { transListToTreeData } from '@/utils'
 export default {
   props: {
     showDialog: {
@@ -73,6 +84,16 @@ export default {
         departmentName: [{ required: true, message: '部门不能为空', trigger: 'change' }],
         timeOfEntry: [{ required: true, message: '入职时间', trigger: 'blur' }]
       }
+    }
+  },
+  methods: {
+    async getDepartments() {
+      this.showTree = true
+      this.loading = true
+      const { depts } = await getDepartments()
+      // depts是数组 但不是树形
+      this.treeData = transListToTreeData(depts, '')
+      this.loading = false
     }
   }
 }
