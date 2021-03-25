@@ -12,14 +12,15 @@
         <el-date-picker v-model="formData.timeOfEntry" style="width:50%" placeholder="请选择日期" />
       </el-form-item>
       <el-form-item label="聘用形式" prop="formOfEmployment">
-        <el-select v-model="formData.formOfEmployment" style="width:50%" placeholder="请选择" />
+        <el-select v-model="formData.formOfEmployment" style="width:50%" placeholder="请选择">
+          <el-option v-for="item in EmployeeEnum.hireType" :key="item.id" :label="item.value" :value="item.id" />
+        </el-select>
       </el-form-item>
       <el-form-item label="工号" prop="workNumber">
         <el-input v-model="formData.workNumber" style="width:50%" placeholder="请输入工号" />
       </el-form-item>
       <el-form-item label="部门" prop="departmentName">
         <el-input v-model="formData.departmentName" style="width:50%" placeholder="请选择部门" @focus="getDepartments" />
-        <!-- 放置一个tree组件 -->
         <el-tree
           v-if="showTree"
           v-loading="loading"
@@ -46,9 +47,9 @@
 </template>
 
 <script>
-import EmployeeEnum from '@/api/constant/employees'
 import { getDepartments } from '@/api/departments'
-import { transListToTreeData } from '@/utils'
+import { tranListToTreeData } from '@/utils'
+import EmployeeEnum from '@/api/constant/employees'
 export default {
   props: {
     showDialog: {
@@ -58,11 +59,6 @@ export default {
   },
   data() {
     return {
-      EmployeeEnum, // 在data中定义数据
-      // 表单数据
-      treeData: [], // 定义数组接收树形数据
-      showTree: false, // 控制树形的显示或者隐藏
-      loading: false, // 控制树的显示或者隐藏进度条
       formData: {
         username: '',
         mobile: '',
@@ -73,17 +69,29 @@ export default {
         correctionTime: ''
       },
       rules: {
-        username: [{ required: true, message: '用户姓名不能为空', trigger: 'blur' }, {
-          min: 1, max: 4, message: '用户姓名为1-4位'
-        }],
-        mobile: [{ required: true, message: '手机号不能为空', trigger: 'blur' }, {
-          pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur'
-        }],
-        formOfEmployment: [{ required: true, message: '聘用形式不能为空', trigger: 'blur' }],
-        workNumber: [{ required: true, message: '工号不能为空', trigger: 'blur' }],
-        departmentName: [{ required: true, message: '部门不能为空', trigger: 'change' }],
+        username: [
+          { required: true, message: '用户姓名不能为空', trigger: 'blur' },
+          { min: 1, max: 4, message: '用户姓名为1-4位' }
+        ],
+        mobile: [
+          { required: true, message: '手机号不能为空', trigger: 'blur' },
+          { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }
+        ],
+        formOfEmployment: [
+          { required: true, message: '聘用形式不能为空', trigger: 'blur' }
+        ],
+        workNumber: [
+          { required: true, message: '工号不能为空', trigger: 'blur' }
+        ],
+        departmentName: [
+          { required: true, message: '部门不能为空', trigger: 'change' }
+        ],
         timeOfEntry: [{ required: true, message: '入职时间', trigger: 'blur' }]
-      }
+      },
+      treeData: [],
+      showTree: false,
+      loading: false,
+      EmployeeEnum
     }
   },
   methods: {
@@ -92,8 +100,12 @@ export default {
       this.loading = true
       const { depts } = await getDepartments()
       // depts是数组 但不是树形
-      this.treeData = transListToTreeData(depts, '')
+      this.treeData = tranListToTreeData(depts, '')
       this.loading = false
+    },
+    selectNode(node) {
+      this.formData.departmentName = node.name
+      this.showTree = false
     }
   }
 }
