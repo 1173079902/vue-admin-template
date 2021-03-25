@@ -1,6 +1,6 @@
 <template>
   <!-- 公共导入组件 -->
-  <upload-excel />
+  <upload-excel :on-success="success" />
 </template>
 
 <script>
@@ -11,7 +11,9 @@ export default {
     return {}
   },
 
-  methods: {}
+  methods: {
+    success({ header, results }) {}
+  }
 }
 </script>
 
