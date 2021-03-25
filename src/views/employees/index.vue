@@ -50,7 +50,7 @@
       </el-card>
     </div>
     <!-- 放置新增组件 -->
-    <add-employee :show-dialog="showDialog" />
+    <add-employee :show-dialog.sync="showDialog" />
   </div>
 </template>
 
