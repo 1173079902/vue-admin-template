@@ -3,8 +3,8 @@ import Layout from '@/layout'
 // { path: '', component: '' }
 // 每个子模块 其实 都是外层是layout 组件位于layout的二级路由里面
 export default {
-  path: '/employess', // 路径
-  name: 'employess', // 给路由规则叫一个name
+  path: '/employees', // 路径
+  name: 'employees', // 给路由规则叫一个name
   component: Layout, // 组件
   // 配置二级路由的路由表
   children: [{
@@ -14,6 +14,13 @@ export default {
     meta: {
       title: '员工管理', // meta属性的里面的属性 随意定义 但是这里为什么要用title呢，因为左侧导航会读取我们的路由里的meta里面的title作为显示菜单名称
       icon: 'people'
+    }
+  }, {
+    path: 'detail/:id', // query传参 动态路由传参
+    component: () => import('@/views/employees/detail'),
+    hidden: true, // 不在左侧菜单显示
+    meta: {
+      title: '员工详情' // 标记当前路由规则的中文名称 后续在做左侧菜单时 使用
     }
   }]
 }
