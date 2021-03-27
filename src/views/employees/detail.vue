@@ -16,14 +16,22 @@
                 <el-input v-model="userInfo.username" style="width:300px" />
               </el-form-item>
               <el-form-item label="密码:" prop="password2">
-                <el-input v-model="userInfo.password2" style="width:300px" type="password" />
+                <el-input
+                  v-model="userInfo.password2"
+                  style="width:300px"
+                  type="password"
+                />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="saveUser">更新</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="个人详情" />
+          <el-tab-pane label="个人详情">
+            <!-- 放置个人详情 -->
+            <component :is="userComponent" />
+            <!-- <user-info /> -->
+          </el-tab-pane>
           <el-tab-pane label="岗位信息" />
         </el-tabs>
       </el-card>
@@ -34,11 +42,16 @@
 <script>
 import { getUserDetailById } from '@/api/user'
 import { saveUserDetailById } from '@/api/employees'
+import UserInfo from './components/user-info'
 export default {
   name: '',
+  components: {
+    UserInfo
+  },
 
   data() {
     return {
+      userComponent: UserInfo,
       userId: this.$route.params.id, // 这样可以后面直接通过 this.userId进行获取数据
       userInfo: {
         //   专门存放基本信息
@@ -67,7 +80,10 @@ export default {
       try {
         // 校验
         await this.$refs.userForm.validate()
-        await saveUserDetailById({ ...this.userInfo, password: this.userInfo.password2 }) // 将新密码的值替换原密码的值
+        await saveUserDetailById({
+          ...this.userInfo,
+          password: this.userInfo.password2
+        }) // 将新密码的值替换原密码的值
         this.$message.success('保存成功')
       } catch (error) {
         console.log(error)
