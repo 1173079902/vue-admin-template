@@ -7,6 +7,7 @@
       :on-preview="preview"
       :on-remove="handleRemove"
       :on-change="changeFile"
+      :before-upload="beforeUpload"
       :file-list="fileList"
       :class="{ disabled: fileComputed }"
     >
@@ -57,6 +58,22 @@ export default {
       // 上面之所以出不来，原因是上面的操作方式 this.fileList 最终还是为空数组，可如下写法
       // fileList.length && (this.fileList = fileList.map(item => ({ url: item.url })))
       // 上传成功 -> 数据才能进来 -> 腾讯云 OS
+    },
+    beforeUpload(file) {
+      // 要开始做文件上传的检查了
+      // 文件类型 文件大小
+      const types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png']
+      if (!types.includes(file.type)) {
+        this.$message.error('上传图片只能是 JPG、GIF、BMP、PNG 格式!')
+        return false
+      }
+      //  检查大小
+      const maxSize = 5 * 1024 * 1024
+      if (maxSize < file.size) {
+        this.$message.error('图片大小最大不能超过5M')
+        return false
+      }
+      return true
     }
   }
 }
