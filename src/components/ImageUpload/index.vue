@@ -1,6 +1,13 @@
 <template>
   <div>
-    <el-upload list-type="picture-card" :limit="1" action="#">
+    <el-upload
+      list-type="picture-card"
+      :limit="1"
+      action="#"
+      :on-preview="preview"
+      :file-list="fileList"
+      :class="{ disabled: fileComputed }"
+    >
       <i class="el-icon-plus" />
     </el-upload>
     <el-dialog title="图片" :visible.sync="showDialog">
@@ -15,9 +22,20 @@ export default {
 
   data() {
     return {
-      fileList: [], // 图片地址设置为数组
+      fileList: [
+        {
+          url: `https://img0.baidu.com/it/u=1986451467,394304688&fm=26&fmt=auto&gp=0.jpg`
+        }
+      ], // 图片地址设置为数组
       showDialog: false, // 控制显示弹层
       imgUrl: ''
+    }
+  },
+
+  computed: {
+    // 设定一个计算属性 判断是否已经上传完了一张
+    fileComputed() {
+      return this.fileList.length === 1
     }
   },
 
@@ -31,4 +49,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style>
+.disabled .el-upload--picture-card {
+  display: none;
+}
+</style>
