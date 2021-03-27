@@ -58,6 +58,7 @@
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee'
+import { formatDate } from '@/filters'
 export default {
   components: {
     AddEmployee
@@ -106,7 +107,24 @@ export default {
       }
     },
     formatJson(headers, rows) {
-      return rows.map(item => Object.keys(headers).map(key => item[headers[key]]))
+      return rows.map(item => {
+        // item是一个对象  { mobile: 132111,username: '张三'  }
+        // ["手机号", "姓名", "入职日期" 。。]
+        return Object.keys(headers).map(key => {
+          // 需要判断 字段
+          if (headers[key] === 'timeOfEntry' || headers[key] === 'correctionTime') {
+            // 格式化日期
+            return formatDate(item[headers[key]])
+          } else if (headers[key] === 'formOfEmployment') {
+            const obj = EmployeeEnum.hireType.find(obj => obj.id === item[headers[key]])
+            return obj ? obj.value : '未知'
+          }
+          return item[headers[key]]
+        })
+        // ["132", '张三’， ‘’，‘’，‘’d]
+      })
+      // return rows.map(item => Object.keys(headers).map(key => item[headers[key]]))
+      // 需要处理时间格式问题
     },
     exportData() {
       const headers = {
@@ -129,7 +147,7 @@ export default {
         excel.export_json_to_excel({
           header: Object.keys(headers),
           data,
-          filename: '员工工资表'
+          filename: '员工资料表'
         })
       })
     }
