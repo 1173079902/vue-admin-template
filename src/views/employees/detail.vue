@@ -34,8 +34,8 @@
                   <i class="el-icon-printer" />
                 </router-link>
               </el-tooltip>
-              <!-- 放置个人详情 -->
             </el-row>
+            <!-- 放置个人详情 -->
             <component :is="userComponent" />
             <!-- <user-info /> -->
           </el-tab-pane>

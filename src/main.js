@@ -17,6 +17,9 @@ import '@/permission' // permission control
 import * as directives from '@/directives'
 import * as filters from '@/filters'
 import Component from '@/components'
+import Print from 'vue-print-nb' // 注册打印插件
+
+Vue.use(Print)
 
 Vue.use(Component) // 注册自己的插件
 
