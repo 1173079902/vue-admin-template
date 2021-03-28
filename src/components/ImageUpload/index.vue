@@ -31,13 +31,10 @@ export default {
 
   data() {
     return {
-      fileList: [
-        {
-          url: `https://img0.baidu.com/it/u=1986451467,394304688&fm=26&fmt=auto&gp=0.jpg`
-        }
-      ], // 图片地址设置为数组
+      fileList: [], // 图片地址设置为数组
       showDialog: false, // 控制显示弹层
-      imgUrl: ''
+      imgUrl: '',
+      currentFileUid: null
     }
   },
 
@@ -79,6 +76,7 @@ export default {
         this.$message.error('图片大小最大不能超过5M')
         return false
       }
+      this.currentFileUid = file.uid
       return true
     },
     upload(params) {
@@ -91,9 +89,17 @@ export default {
           Body: params.file, // 要上传的文件对象
           StorageClass: 'STANDARD' // 上传的模式类型 直接默认 标准模式即可
           // 上传到腾讯云 =》 哪个存储桶 哪个地域的存储桶 文件  格式  名称 回调
-        }, function(err, data) {
+        }, (err, data) => {
           // data返回数据之后 应该如何处理
           console.log(err || data)
+          if (!err && data.statusCode === 200) {
+            this.fileList = this.fileList.map(item => {
+              if (item.uid === this.currentFileUid) {
+                return { url: 'http://' + data.Location, upload: true }
+              }
+              return item
+            })
+          }
         })
       }
     }
