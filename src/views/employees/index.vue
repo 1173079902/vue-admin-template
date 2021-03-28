@@ -177,7 +177,7 @@ export default {
     showQrCode(url) {
       // url存在的情况下 才弹出层
       console.log(url)
-      if (url) {
+      if (url && url !== ' ') {
         this.showCodeDialog = true // 数据更新了 但是我的弹层会立刻出现吗 ？页面的渲染是异步的！！！！
         // 有一个方法可以在上一次数据更新完毕，页面渲染完毕之后
         this.$nextTick(() => {
