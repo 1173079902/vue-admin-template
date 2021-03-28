@@ -362,23 +362,36 @@ export default {
   methods: {
     async getPersonalDetail() {
       this.formData = await getPersonalDetail(this.userId) // 获取员工数据
-      if (this.userInfo.staffPhoto) {
+      if (this.userInfo.staffPhoto && this.formData.staffPhoto.trim()) {
         // 这里我们赋值，同时需要给赋值的地址一个标记 upload: true
         this.$refs.staffPhoto.fileList = [{ url: this.userInfo.staffPhoto, upload: true }]
       }
     },
     async savePersonal() {
-      await updatePersonal({ ...this.formData, id: this.userId })
+      const fileList = this.$refs.myStaffPhoto.fileList
+      if (fileList.some(item => !item.upload)) {
+        //  如果此时去找 upload为false的图片 找到了说明 有图片还没有上传完成
+        this.$message.warning('您当前还有图片没有上传完成！')
+        return
+      }
+      await updatePersonal({ ...this.formData, staffPhoto: fileList && fileList.length ? fileList[0].url : '' })
       this.$message.success('保存成功')
     },
     async saveUser() {
     //  调用父组件
-      await saveUserDetailById(this.userInfo)
+    // 去读取 员工上传的头像
+      const fileList = this.$refs.staffPhoto.fileList // 读取上传组件的数据
+      if (fileList.some(item => !item.upload)) {
+        //  如果此时去找 upload为false的图片 找到了说明 有图片还没有上传完成
+        this.$message.warning('您当前还有图片没有上传完成！')
+        return
+      }
+      await saveUserDetailById({ ...this.userInfo, staffPhoto: fileList && fileList.length ? fileList[0].url : '' })
       this.$message.success('保存成功')
     },
     async getUserDetailById() {
       this.userInfo = await getUserDetailById(this.userId)
-      if (this.formData.staffPhoto) {
+      if (this.formData.staffPhoto && this.userInfo.staffPhoto.trim()) {
         this.$refs.myStaffPhoto.fileList = [{ url: this.formData.staffPhoto, upload: true }]
       }
     }
