@@ -8,25 +8,40 @@
         </template>
       </page-tools>
       <!-- 表格 -->
-      <el-table border>
-        <el-table-column align="center" label="名称" />
-        <el-table-column align="center" label="标识" />
-        <el-table-column align="center" label="描述" />
+      <el-table border :data="list" row-key="id">
+        <el-table-column label="名称" prop="name" />
+        <el-table-column align="center" label="标识" prop="code" />
+        <el-table-column align="center" label="描述" prop="description" />
         <el-table-column align="center" label="操作">
-          <template>
-            <el-button type="text">添加</el-button>
+          <template slot-scope="{ row }">
+            <el-button v-if="row.type === 1" type="text">添加</el-button>
             <el-button type="text">编辑</el-button>
             <el-button type="text">删除</el-button>
           </template>
         </el-table-column>
-
       </el-table>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import { getPermissionList } from '@/api/permisson'
+import { tranListToTreeData } from '@/utils'
+export default {
+  data() {
+    return {
+      list: []
+    }
+  },
+  created() {
+    this.getPermissionList()
+  },
+  methods: {
+    async getPermissionList() {
+      this.list = tranListToTreeData(await getPermissionList(), '0')
+    }
+  }
+}
 </script>
 
 <style></style>
