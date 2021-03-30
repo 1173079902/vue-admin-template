@@ -4,7 +4,7 @@
       <!-- 靠右的按钮 -->
       <page-tools>
         <template v-slot:after>
-          <el-button type="primary" size="small">添加权限</el-button>
+          <el-button type="primary" size="small" @click="addPermission('0', 1)">添加权限</el-button>
         </template>
       </page-tools>
       <!-- 表格 -->
@@ -14,15 +14,15 @@
         <el-table-column align="center" label="描述" prop="description" />
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
-            <el-button v-if="row.type === 1" type="text">添加</el-button>
-            <el-button type="text">编辑</el-button>
-            <el-button type="text">删除</el-button>
+            <el-button v-if="row.type === 1" type="text" @click="addPermission(row.id, 2)">添加</el-button>
+            <el-button type="text" @click="editPermission(row.id)">编辑</el-button>
+            <el-button type="text" @click="delPermission(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 放置一个弹层 用来编辑新增节点 -->
-    <el-dialog :title="`权限点`" :visible="showDialog" @close="btnCancel">
+    <el-dialog :title="`${showText}权限点`" :visible="showDialog" @close="btnCancel">
       <!-- 表单 -->
       <el-form ref="perForm" :model="formData" :rules="rules" label-width="120px">
         <el-form-item label="权限名称" prop="name">
@@ -53,13 +53,13 @@
 </template>
 
 <script>
-import { getPermissionList } from '@/api/permisson'
+import { updatePermission, addPermission, getPermissionDetail, delPermission, getPermissionList } from '@/api/permisson'
 import { tranListToTreeData } from '@/utils'
 export default {
   data() {
     return {
       list: [],
-      showDialog: true,
+      showDialog: false,
       formData: {
         name: '', // 名称
         code: '', // 标识
@@ -74,6 +74,11 @@ export default {
       }
     }
   },
+  computed: {
+    showText() {
+      return this.formData.id ? '编辑' : '新增'
+    }
+  },
   created() {
     this.getPermissionList()
   },
@@ -81,8 +86,50 @@ export default {
     async getPermissionList() {
       this.list = tranListToTreeData(await getPermissionList(), '0')
     },
-    btnOK() {},
-    btnCancel() {}
+    async delPermission(id) {
+      try {
+        await this.$confirm('确定要删除吗?')
+        await delPermission(id)
+        this.$message.success('删除成功')
+        this.getPermissionList()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    addPermission(pid, type) {
+      this.formData.pid = pid
+      this.formData.type = type
+      this.showDialog = true
+    },
+    btnOK() {
+      this.$refs.perForm.validate().then(() => {
+        if (this.formData.id) {
+          return updatePermission(this.formData)
+        }
+        return addPermission(this.formData)
+      }).then(() => {
+        this.$message.success('操作成功')
+        this.getPermissionList()
+        this.showDialog = false
+      })
+    },
+    btnCancel() {
+      this.formData = {
+        name: '', // 名称
+        code: '', // 标识
+        description: '', // 描述
+        type: '', // 类型 该类型 不需要显示 因为点击添加的时候已经知道类型了
+        pid: '', // 因为做的是树 需要知道添加到哪个节点下了
+        enVisible: '0' // 开启
+      }
+      this.$refs.perForm.resetFields()
+      this.showDialog = false
+    },
+    async editPermission(id) {
+      // 根据获取id获取详情
+      this.formData = await getPermissionDetail(id)
+      this.showDialog = true
+    }
   }
 }
 </script>
