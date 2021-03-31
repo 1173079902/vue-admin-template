@@ -13,7 +13,7 @@ const mutations = {
     // state.routes = [...state.routes, newRoutes]
     // 有一种情况 张三 登录 获取了动态路由 追加到路由上 李四登录 4个动态路由
     // 应该是每次更新 都应该在静态路由的基础上进行追加
-    state.routes = [...constantRoutes, newRoutes]
+    state.routes = [...constantRoutes, ...newRoutes]
   }
 }
 
