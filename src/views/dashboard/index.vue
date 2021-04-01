@@ -140,6 +140,7 @@
           <el-input
             v-model="ruleForm.reason"
             type="textarea"
+            :autosize="{ minRows: 3, maxRows: 8}"
             style="width: 70%;"
             placeholder="请输入内容"
           />

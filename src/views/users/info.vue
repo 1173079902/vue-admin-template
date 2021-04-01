@@ -7,7 +7,7 @@
     </div>
     <div class="myInfoCont">
       <div class="myInfoPic">
-        <img src="@/assets/common/img.jpeg" width="100" alt>
+        <img v-imagerror="defaultImg" :src="staffPhoto" width="100" alt>
       </div>
       <div>
         <el-form ref="myInfo" :model="myInfo" label-width="80px">
@@ -45,6 +45,7 @@ export default {
   name: 'UsersTableIndex',
   data() {
     return {
+      defaultImg: require('@/assets/common/head.jpg'),
       loading: false,
       myInfo: {
         dateOfBirth: '',
@@ -53,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userId'])
+    ...mapGetters(['userId', 'staffPhoto'])
   },
   created() {
     this.getUserInfo()
