@@ -19,9 +19,13 @@ import * as filters from '@/filters'
 import Component from '@/components'
 import Print from 'vue-print-nb' // 注册打印插件
 
+import CheckPermission from '@/mixin/checkPermission' // 注册混入检查对象
+
 Vue.use(Print)
 
 Vue.use(Component) // 注册自己的插件
+
+Vue.mixin(CheckPermission) // 全局混入检查对象
 
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
