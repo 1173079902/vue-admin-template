@@ -29,6 +29,10 @@ Vue.use(Component) // 注册自己的插件
 
 Vue.mixin(CheckPermission) // 全局混入检查对象
 
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
+
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
 })
