@@ -15,6 +15,8 @@
     <div class="right-menu">
       <!-- 全屏插件 -->
       <screen-full class="right-menu-item" />
+      <!-- 放置全屏插件 -->
+      <theme-picker class="right-menu-item" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imagerror="defaultImg" :src="staffPhoto" class="user-avatar" />
