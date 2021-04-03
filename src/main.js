@@ -21,6 +21,8 @@ import Print from 'vue-print-nb' // 注册打印插件
 
 import CheckPermission from '@/mixin/checkPermission' // 注册混入检查对象
 
+import i18n from '@/lang'
+
 Vue.use(Print)
 
 Vue.use(Component) // 注册自己的插件
@@ -53,5 +55,6 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: h => h(App)
 })
