@@ -55,6 +55,13 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
+    },
+    // 排除 elementUI xlsx  和 vue
+    externals:
+    {
+      'vue': 'Vue',
+      'element-ui': 'ELEMENT',
+      'xlsx': 'XLSX'
     }
   },
   chainWebpack(config) {
